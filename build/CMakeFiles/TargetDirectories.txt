@@ -1,0 +1,3 @@
+/home/matheus/Documents/projetos/SimColi_xlib/build/CMakeFiles/SimColisao.dir
+/home/matheus/Documents/projetos/SimColi_xlib/build/CMakeFiles/edit_cache.dir
+/home/matheus/Documents/projetos/SimColi_xlib/build/CMakeFiles/rebuild_cache.dir

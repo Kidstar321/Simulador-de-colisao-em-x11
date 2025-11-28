@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/matheus/Documents/projetos/SimColi_xlib/build",
+  "command": "/usr/bin/cc   -std=gnu11 -o CMakeFiles/SimColisao.dir/main.c.o -c /home/matheus/Documents/projetos/SimColi_xlib/main.c",
+  "file": "/home/matheus/Documents/projetos/SimColi_xlib/main.c",
+  "output": "CMakeFiles/SimColisao.dir/main.c.o"
+}
+]
