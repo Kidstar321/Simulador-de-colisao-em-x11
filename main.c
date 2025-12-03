@@ -10,6 +10,10 @@
 #define ALTURA_W 720
 #define FPS 60
 #define DT 1.0/FPS
+#define V_RANGE 200
+#define R_MIN 20
+#define R_MAX 100
+#define MAX_BOLAS 10
 
 typedef struct 
 {
@@ -108,14 +112,14 @@ int main()
     int i,j;
 
     Bola* bolas;
-    bolas=(Bola*)malloc(10*sizeof(Bola));
+    bolas=(Bola*)malloc(MAX_BOLAS*sizeof(Bola));
 
     int qualcolis; //identificador de qual bola colidiu com qual
     double anterior_t=0.0,atual_t;
     bool rodando=1;
 
     //var aux para as colisões
-    float van,vbn,van2,vbn2;
+    float van,vbn;
     float vat,vbt;
     int ma,mb;
     double sin,cos;
@@ -144,23 +148,27 @@ int main()
             cronometro++;
             limpaTela(d,buffer,gc,"#000000");
             
-            if(n_criadas<10&&cronometro>=60) //spawn de nova bola
+            if(n_criadas<MAX_BOLAS&&cronometro>=60) //spawn de nova bola
             {
                 cronometro=0;
 
-                bolas[n_criadas].r=25+rand()%76; //r entre 25 e 100
+                bolas[n_criadas].r=R_MIN+rand()%(R_MAX-R_MIN+1); //r com valor aleatorio
 
                 temoverlap=1;
-                while(temoverlap)
+                aux=0;
+                while(temoverlap&&aux<1000) //confere se a bola criada não estara dentro de outra
                 {
-                bolas[n_criadas].x=rand()%(LARGURA_W+1);
-                bolas[n_criadas].y=rand()%(ALTURA_W+1);
+                    bolas[n_criadas].x=rand()%(LARGURA_W+1);
+                    bolas[n_criadas].y=rand()%(ALTURA_W+1);
 
-                temoverlap=algumOverlap(bolas[n_criadas],n_criadas,bolas,n_criadas,&qualcolis,&overlap);
+                    temoverlap=algumOverlap(bolas[n_criadas],n_criadas,bolas,n_criadas,&qualcolis,&overlap);
+                    aux++;
                 }
+                if(aux>1000) rodando=0;
 
-                bolas[n_criadas].vx=-200+(double)rand()/RAND_MAX*400; //v entre -200 e 200
-                bolas[n_criadas].vy=-200+(double)rand()/RAND_MAX*400;
+
+                bolas[n_criadas].vx=-V_RANGE+(double)rand()/RAND_MAX*2*V_RANGE; //v com valor aleatorio
+                bolas[n_criadas].vy=-V_RANGE+(double)rand()/RAND_MAX*2*V_RANGE;
 
                 sprintf(bolas[n_criadas].cor,"#%06X",rand()%0x1000000); //cor aleatoria
 
@@ -218,7 +226,7 @@ int main()
                     ma = bolas[i].r * bolas[i].r;
                     mb = bolas[qualcolis].r * bolas[qualcolis].r;
 
-                    // colsaio elastica
+                    // colisao elastica
                     vaux = van;
                     van = (van*(ma-mb) + 2*mb*vbn) / (ma+mb);
                     vbn = (vbn*(mb-ma) + 2*ma*vaux) / (ma+mb);
@@ -250,6 +258,5 @@ int main()
 
         usleep(1000);
     }
-
-
+    free(bolas);
 }
